@@ -59,7 +59,9 @@ REPORT-FN is Flymake's callback function."
              :command (list flymake-actionlint-program "-")
              :sentinel
              (lambda (proc event) (flymake-actionlint--process-sentinel proc event source report-fn))))
-      (process-send-region flymake-actionlint--proc (point-min) (point-max))
+      (save-restriction
+        (widen)
+        (process-send-region flymake-actionlint--proc (point-min) (point-max)))
       (process-send-eof flymake-actionlint--proc))))
 
 (defun flymake-actionlint--process-sentinel (proc _event source report-fn)
